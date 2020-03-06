@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             mc:Ignorable="d"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             x:Class="Pokedex.View.PokedexPage"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             android:ListView.IsFastScrollEnabled="True"
+             ios:Page.UseSafeArea="true">
+
+    <NavigationPage.TitleView>
+        <Image
+            HeightRequest="40"
+            Source="logo.png"
+            VerticalOptions="Center" />
+    </NavigationPage.TitleView>
+
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            <FontImageSource
+                x:Key="galeryIcon"
+                FontFamily="{StaticResource FontAwesomeRegular}"
+                Glyph="{x:Static fontawesome:FontAwesomeIcons.Images}"
+                Size="20"
+                Color="White" />
+        </ResourceDictionary>
+    </ContentPage.Resources>-->
+
+    <ContentPage.Content>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--<RefreshView IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">-->
+            <CollectionView
+                    x:Name="lv"
+                    Grid.Row="0"
+                    SelectionMode="Single"
+                    ItemsSource="{Binding Pokemons}"
+                    VerticalOptions="Start"
+                    SelectionChangedCommand="{Binding NavegarCommand, Mode=TwoWay}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Spacing="8">
+                            <Frame
+                               Margin="10"
+                               Padding="0"
+                               BackgroundColor="#3663ad"
+                               CornerRadius="5">
+                                <Grid RowSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <ff:CachedImage
+                                          Grid.Row="0"
+                                          HeightRequest="100"
+                                          WidthRequest="100"
+                                          Aspect="AspectFit"
+                                          FadeAnimationDuration="500"
+                                          FadeAnimationEnabled="True"
+                                          HorizontalOptions="Center"
+                                          Source="{Binding sprites.front_default}">
+                                        <ff:CachedImage.Transformations>
+                                            <ffTransformations:RoundedTransformation Radius="240" />
+                                        </ff:CachedImage.Transformations>
+                                    </ff:CachedImage>
+
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="Medium"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding name}"
+                                        TextColor="White"
+                                    Margin="0,0,0,20"
+                                        VerticalTextAlignment="Center" />
+                                </Grid>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!--<StackLayout BackgroundColor="White"
+                        Grid.Row="1"
+                        IsVisible="{Binding IsBusyAtualizacao}">
+                <ActivityIndicator
+                            Margin="0,20,0,0"
+                            HeightRequest="{OnPlatform Android=20,iOS=48}"
+                            IsRunning="{Binding IsBusyAtualizacao}"
+                            IsVisible="{Binding IsBusyAtualizacao}"
+                            WidthRequest="{OnPlatform Android=20,iOS=48}"
+                            Color="#E94690" />
+
+                <Label Margin="0,0,0,20"
+                            FontFamily="{StaticResource GothamRoundedMedium}"
+                            FontSize="Small"
+                            HorizontalTextAlignment="Center"
+                            IsVisible="{Binding IsBusyAtualizacao}"
+                            Text="Buscando..."
+                            TextColor="Black" />
+            </StackLayout>-->
+
+            <!--</RefreshView>-->
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
