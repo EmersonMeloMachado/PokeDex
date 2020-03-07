@@ -22,8 +22,11 @@ namespace Pokedex.ViewModel
         private bool _isBusyTypes;
         private PokemonType _pokemonType;
         bool isRefreshing;
-        private int offset = 0;
+        private int offSetInicial = 0;
+        private int offSetFinal = 0;
         private PokemonList pokemonList;
+
+        private int _remainingItems = 0;
 
         public DelegateCommand<Pokemon> galeriaCommand;
         public DelegateCommand<Pokemon> navegarCommand;
@@ -38,6 +41,12 @@ namespace Pokedex.ViewModel
         {
             get => _isBusyAtualizacao;
             set => SetProperty(ref _isBusyAtualizacao, value);
+        }
+
+        public int RemainingItems
+        {
+            get { return _remainingItems; }
+            set { SetProperty(ref _remainingItems, value); }
         }
 
         public bool IsBusyTypes
@@ -56,12 +65,30 @@ namespace Pokedex.ViewModel
             }
         }
 
+        private Result _itemSelected;
+        public Result ItemSelected
+        {
+            get { return _itemSelected; }
+            set { SetProperty(ref _itemSelected, value); }
+        }
+
         public DelegateCommand<Pokemon> NavegarCommand => navegarCommand ?? (navegarCommand = new DelegateCommand<Pokemon>(async (pokemon) => await NavegarCommandExecute(pokemon)));
 
-        public int OffSet
+
+        public DelegateCommand tresholdReachedCommand;
+
+        public DelegateCommand ThresholdReachedCommand => tresholdReachedCommand ?? (tresholdReachedCommand = new DelegateCommand(async () => await ThresholdReachedCommandExecute()));
+
+        public int OffSetInicial
         {
-            get { return offset; }
-            set { SetProperty(ref offset, value); }
+            get { return offSetInicial; }
+            set { SetProperty(ref offSetInicial, value); }
+        }
+
+        public int OffSetFinal
+        {
+            get { return offSetFinal; }
+            set { SetProperty(ref offSetFinal, value); }
         }
 
         public PokemonList PokemonList
@@ -104,7 +131,7 @@ namespace Pokedex.ViewModel
                 IsBusy = true;
                 Pokemons.Clear();
                 var items = new List<Pokemon>();
-                PokemonList = await _pokeApi.ObterListaPokemons(offset: OffSet);
+                PokemonList = await _pokeApi.ObterListaPokemons(OffSetInicial, OffSetFinal);
 
                 if (PokemonList != null)
                 {
@@ -116,7 +143,7 @@ namespace Pokedex.ViewModel
                     }
 
                     Pokemons.AddRange(items);
-                    offset += 20;
+                    OffSetFinal += 20;
                 }
                 IsBusy = false;
             }
@@ -136,38 +163,60 @@ namespace Pokedex.ViewModel
             //await PopupNavigation.Instance.PushAsync(new PokemonPopupPage(pokemon));
         }
 
+        private async Task ThresholdReachedCommandExecute()
+        {
+
+            if(IsBusy) 
+                return;
+
+            try
+            {
+                if(OffSetFinal == 0) return;
+
+                IsBusy = true;
+                var items = new List<Pokemon>();
+
+                OffSetInicial = OffSetFinal;
+
+                PokemonList = await _pokeApi.ObterListaPokemons(OffSetInicial, OffSetFinal);
+
+                if(PokemonList != null)
+                {
+                    foreach(var poke in PokemonList.results)
+                    {
+                        var pokemon = await _pokeApi.ObterPokemon(poke.url);
+                        if(pokemon != null)
+                            items.Add(pokemon);
+                    }
+
+                    Pokemons.AddRange(items);
+                    OffSetFinal += 20;
+                }
+                IsBusy = false;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         private async Task RefreshCommandExecute()
         {
             if (PokemonType == null)
                 await LoadPokemons();
 
             Pokemons.Clear();
-            offset = 0;
         }
 
         public IEnumerable<string> AutoComplete(string termo)
         {
             return PokemonType.results.Where(x => x.name.StartsWith(termo, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.name);
         }
-
-        public async Task ObterPokemonPorPaginacao()
-        {
-            try
-            {
-                IsBusyAtualizacao = true;
-                if (OffSet > 0)
-                {
-                    await LoadPokemons();
-                }
-                IsBusyAtualizacao = false;
-            }
-            catch (Exception ex)
-            {
-                IsBusyAtualizacao = false;
-                Console.WriteLine(ex.Message);
-            }
-        }
-
+        
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);

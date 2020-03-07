@@ -47,8 +47,13 @@
                     x:Name="lv"
                     Grid.Row="0"
                     SelectionMode="Single"
+                    ItemsUpdatingScrollMode="KeepItemsInView"
+                    RemainingItemsThreshold="{Binding RemainingItems}"
+                    RemainingItemsThresholdReachedCommand="{Binding ThresholdReachedCommand}"
                     ItemsSource="{Binding Pokemons}"
                     VerticalOptions="Start"
+                    SelectedItem="{Binding ItemSelected}"
+                    SelectionChangedCommandParameter="{Binding ItemSelected}"
                     SelectionChangedCommand="{Binding NavegarCommand, Mode=TwoWay}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3" />
