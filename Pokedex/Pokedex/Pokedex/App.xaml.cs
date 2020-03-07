@@ -1,6 +1,7 @@
 ﻿using Pokedex.Sevices;
 using Pokedex.Sevices.Interface;
 using Pokedex.View;
+using Pokedex.View.Popups;
 using Pokedex.ViewModel;
 using Prism;
 using Prism.DryIoc;
@@ -66,6 +67,9 @@ namespace Pokedex
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();
             containerRegistry.RegisterForNavigation<PokedexPage, PokedexViewModel>();
+            containerRegistry.RegisterForNavigation<DetalhePokemonPage, DetalhePokemonViewModel>();
+            containerRegistry.RegisterForNavigation<GaleriaPopupPage, GaleriaPopupViewModel>();
+            
 
             containerRegistry.Register<IPokeApi, PokeApi>();
         }

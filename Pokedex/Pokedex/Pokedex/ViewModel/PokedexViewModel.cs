@@ -1,6 +1,7 @@
 ﻿using Pokedex.Extensions;
 using Pokedex.Model;
 using Pokedex.Sevices.Interface;
+using Pokedex.View;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
@@ -24,18 +25,17 @@ namespace Pokedex.ViewModel
         bool isRefreshing;
         private int offSetInicial = 0;
         private int offSetFinal = 0;
-        private PokemonList pokemonList;
+        private PokemonList pokemonList; 
+        private ObservableCollection<Pokemon> _pokemons;
 
         private int _remainingItems = 0;
 
-        public DelegateCommand<Pokemon> galeriaCommand;
         public DelegateCommand<Pokemon> navegarCommand;
+        public DelegateCommand tresholdReachedCommand;
 
         public DelegateCommand refreshCommand;
 
         #endregion Fields
-
-        public DelegateCommand<Pokemon> GaleriaCommand => galeriaCommand ?? (galeriaCommand = new DelegateCommand<Pokemon>(async (pokemon) => await GaleriaCommandExecute(pokemon)));
 
         public bool IsBusyAtualizacao
         {
@@ -65,19 +65,17 @@ namespace Pokedex.ViewModel
             }
         }
 
-        private Result _itemSelected;
-        public Result ItemSelected
+        private Pokemon _itemSelected;
+        public Pokemon ItemSelected
         {
             get { return _itemSelected; }
             set { SetProperty(ref _itemSelected, value); }
         }
 
         public DelegateCommand<Pokemon> NavegarCommand => navegarCommand ?? (navegarCommand = new DelegateCommand<Pokemon>(async (pokemon) => await NavegarCommandExecute(pokemon)));
-
-
-        public DelegateCommand tresholdReachedCommand;
-
         public DelegateCommand ThresholdReachedCommand => tresholdReachedCommand ?? (tresholdReachedCommand = new DelegateCommand(async () => await ThresholdReachedCommandExecute()));
+
+        public DelegateCommand RefreshCommand => refreshCommand ?? (refreshCommand = new DelegateCommand(async () => await RefreshCommandExecute()));
 
         public int OffSetInicial
         {
@@ -97,15 +95,17 @@ namespace Pokedex.ViewModel
             set { SetProperty(ref pokemonList, value); }
         }
 
-        public ObservableCollection<Pokemon> Pokemons { get; }
+        public ObservableCollection<Pokemon> Pokemons
+        {
+            get { return _pokemons; }
+            set { SetProperty(ref _pokemons, value); }
+        }
 
         public PokemonType PokemonType
         {
             get { return _pokemonType; }
             set { SetProperty(ref _pokemonType, value); }
         }
-
-        public DelegateCommand RefreshCommand => refreshCommand ?? (refreshCommand = new DelegateCommand(async () => await RefreshCommandExecute()));
 
         public PokedexViewModel(INavigationService navigationService, IPokeApi pokeApi, IPageDialogService pageDialogService) : base(navigationService)
         {
@@ -116,38 +116,32 @@ namespace Pokedex.ViewModel
             Pokemons = new ObservableCollection<Pokemon>();
         }
 
-        private async Task GaleriaCommandExecute(Pokemon pokemon)
-        {
-            var parameter = new NavigationParameters();
-            parameter.Add("pokemon", pokemon);
-
-            //await NavigationService.NavigateAsync($"{nameof(GaleriaPage)}", parameter);
-        }
-
         private async Task LoadPokemons()
         {
             try
             {
                 IsBusy = true;
-                Pokemons.Clear();
+                MockSkeleton();
+
                 var items = new List<Pokemon>();
                 PokemonList = await _pokeApi.ObterListaPokemons(OffSetInicial, OffSetFinal);
 
-                if (PokemonList != null)
+                if(PokemonList != null)
                 {
-                    foreach (var poke in PokemonList.results)
+                    foreach(var poke in PokemonList.results)
                     {
                         var pokemon = await _pokeApi.ObterPokemon(poke.url);
-                        if (pokemon != null)
+                        if(pokemon != null)
                             items.Add(pokemon);
                     }
 
+                    Pokemons.Clear();
                     Pokemons.AddRange(items);
                     OffSetFinal += 20;
                 }
                 IsBusy = false;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 await _pageDialogService.DisplayAlertAsync("PokeApp", ex.Message, "OK");
             }
@@ -158,15 +152,120 @@ namespace Pokedex.ViewModel
             }
         }
 
+        private void MockSkeleton()
+        {
+            this.Pokemons = new ObservableCollection<Pokemon>(new List<Pokemon> 
+            {
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                },
+                new Pokemon
+                {
+                    name = "",
+                    sprites = new Sprites{ front_default  = ""}
+                }
+            });
+        }
+
         private async Task NavegarCommandExecute(Pokemon pokemon)
         {
-            //await PopupNavigation.Instance.PushAsync(new PokemonPopupPage(pokemon));
+            var parameter = new NavigationParameters();
+            parameter.Add("pokemon", pokemon);
+
+            await NavigationService.NavigateAsync($"{nameof(DetalhePokemonPage)}", parameter);
         }
 
         private async Task ThresholdReachedCommandExecute()
         {
 
-            if(IsBusy) 
+            if(IsBusy)
                 return;
 
             try
@@ -206,7 +305,7 @@ namespace Pokedex.ViewModel
 
         private async Task RefreshCommandExecute()
         {
-            if (PokemonType == null)
+            if(PokemonType == null)
                 await LoadPokemons();
 
             Pokemons.Clear();
@@ -216,14 +315,14 @@ namespace Pokedex.ViewModel
         {
             return PokemonType.results.Where(x => x.name.StartsWith(termo, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.name);
         }
-        
+
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
 
             var navigationMode = parameters.GetNavigationMode();
 
-            if (navigationMode != NavigationMode.Back)
+            if(navigationMode != NavigationMode.Back)
             {
                 await LoadPokemons();
             }

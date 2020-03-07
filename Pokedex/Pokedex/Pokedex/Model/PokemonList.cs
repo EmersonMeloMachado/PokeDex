@@ -1,4 +1,6 @@
-﻿namespace Pokedex.Model
+﻿using System.Collections.Generic;
+
+namespace Pokedex.Model
 {
     public class PokemonList
     {
@@ -7,7 +9,7 @@
         public int count { get; set; }
         public string next { get; set; }
         public string previous { get; set; }
-        public Result[] results { get; set; }
+        public List<Result> results { get; set; }
 
         #endregion Properties
     }

@@ -149,7 +149,6 @@
 
         public int slot { get; set; }
         public Type1 type { get; set; }
-
         #endregion Properties
     }
 
@@ -159,7 +158,7 @@
 
         public string name { get; set; }
         public string url { get; set; }
-
+        public string TipoColor { get; set; }
         #endregion Properties
     }
 

@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             x:Class="Pokedex.View.DetalhePokemonPage"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Title="{Binding Pokemon.name}"
+             BackgroundColor="#f5f5f5">
+    <ContentPage.Content>
+        <Grid VerticalOptions="CenterAndExpand" BackgroundColor="#f5f5f5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <ff:CachedImage
+                Grid.Row="0"
+                FadeAnimationDuration="500"
+                FadeAnimationEnabled="True"
+                HeightRequest="200"
+                HorizontalOptions="CenterAndExpand"
+                Source="{Binding Pokemon.sprites.front_default}"
+                WidthRequest="300" />
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="ID"
+                    TextColor="Black" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    FontSize="Body"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Pokemon.id}"
+                    TextColor="Black" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="Altura"
+                    TextColor="Black" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Pokemon.height}"
+                    TextColor="Black" />
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="Peso"
+                    TextColor="Black" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Pokemon.weight}"
+                    TextColor="Black" />
+
+            </Grid>
+            <StackLayout Grid.Row="2" HorizontalOptions="Center">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"
+                    Text="Tipos"
+                    TextColor="Black" />
+
+                <FlexLayout
+                    AlignItems="Stretch"
+                    HorizontalOptions="Center"                    
+                    BindableLayout.ItemsSource="{Binding Pokemon.types}"
+                    Direction="Column"
+                    JustifyContent="SpaceEvenly"
+                    Margin="20"
+                    Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                BackgroundColor="{Binding type.TipoColor}"
+                                Padding="0"
+                                HorizontalOptions="Center"
+                                HeightRequest="30"
+                                CornerRadius="20"
+                                HasShadow="False">
+                                <Label
+                                    FontSize="Medium"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding type.name}"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+            </StackLayout>
+            
+            <Frame Grid.Row="3"
+                   Margin="10"
+                   HorizontalOptions="Center"
+                   Padding="15"
+                   BackgroundColor="#3663ad"
+                   CornerRadius="50">
+
+                <Label Text="Galeria de imagens"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GaleriaCommand}"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

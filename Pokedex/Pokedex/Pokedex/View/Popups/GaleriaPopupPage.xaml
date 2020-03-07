@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"             
+             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:prism="http://prismlibrary.com"
+             ios:Page.UseSafeArea="true"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Pokedex.View.Popups.GaleriaPopupPage"
+             BackgroundColor="#f5f5f5">
+    <ContentPage.Content>
+       <cards:CarouselView ItemsSource="{Binding Images}" SelectedIndex="{Binding CurrentIndex}">
+        <cards:CarouselView.ItemTemplate>
+            <DataTemplate>
+                <ContentView>
+                    <Frame
+                        Padding="0"
+                        CornerRadius="10"
+                        HasShadow="false"
+                        HeightRequest="300"
+                        HorizontalOptions="Center"
+                        IsClippedToBounds="true"
+                        VerticalOptions="Center"
+                        WidthRequest="300"
+                        BackgroundColor="#f5f5f5">
+
+                        <ff:CachedImage
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            FadeAnimationDuration="500"
+                            FadeAnimationEnabled="True"
+                            HeightRequest="300                         "
+                            HorizontalOptions="Center"
+                            Source="{Binding .}"
+                            WidthRequest="300" />
+
+                    </Frame>
+                </ContentView>
+            </DataTemplate>
+
+        </cards:CarouselView.ItemTemplate>
+        <controls:IndicatorsControl />
+    </cards:CarouselView>
+    </ContentPage.Content>
+</ContentPage>
